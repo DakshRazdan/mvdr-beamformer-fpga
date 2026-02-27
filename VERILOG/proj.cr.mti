@@ -1,0 +1,36 @@
+{C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/cic_decimator.v} {1 {vlog -work work -stats=none {C:\Users\razda\OneDrive\Desktop\DLD Beamforming\VERILOG\cic_decimator.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module cic_decimator
+
+Top level modules:
+	cic_decimator
+
+} {} {}} {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/i2s_master_clk.v} {1 {vlog -work work -stats=none {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/i2s_master_clk.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module i2s_master_clk
+
+Top level modules:
+	i2s_master_clk
+
+} {} {}} {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/i2s_rx.v} {1 {vlog -work work -stats=none {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/i2s_rx.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module i2s_rx
+
+Top level modules:
+	i2s_rx
+
+} {} {}} {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/cic_decimator_tb.v} {1 {vlog -work work -stats=none {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/cic_decimator_tb.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module cic_decimator_tb
+
+Top level modules:
+	cic_decimator_tb
+
+} {} {}} {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/i2s_rx_tb.v} {1 {vlog -work work -stats=none {C:/Users/razda/OneDrive/Desktop/DLD Beamforming/VERILOG/i2s_rx_tb.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module i2s_rx_tb
+
+Top level modules:
+	i2s_rx_tb
+
+} {} {}}

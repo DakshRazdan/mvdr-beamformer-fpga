@@ -1,0 +1,40 @@
+# ============================================================
+# .gitignore for mvdr-beamformer-fpga
+# ============================================================
+
+# --- Simulation artifacts (iverilog / ModelSim) ---
+a.out
+*.vcd
+*.vvp
+*.wlf
+*.vstf
+work/
+vsim.wlf
+transcript
+
+# --- MATLAB artifacts ---
+*.asv          # Auto-save files
+*.mex*         # Compiled MEX files
+slprj/         # Simulink cache
+*.slxc
+
+# --- Vivado artifacts (if used later) ---
+*.jou
+*.log
+*.str
+.Xil/
+vivado_pid*.str
+*.xpr.bak
+
+# --- OS artifacts ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- VS Code settings (optional — remove this block if you want to commit them) ---
+.vscode/
+
+# --- Backup files ---
+*.bak
+*.v1
+xhxfxgh.v
