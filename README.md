@@ -33,9 +33,9 @@ MVDR beam pattern: deep nulls (~55 dB) at noise source angles (-45° and 60°), 
 ```
 4× INMP441 I2S MEMS Mics
         ↓
-I2S RX Controller (i2s_rx.v)        ← VERIFIED ✅
+I2S RX Controller (i2s_rx.v)        ← VERIFIED 
         ↓
-CIC Decimation Filter (cic_decimator.v)  ← VERIFIED ✅
+CIC Decimation Filter (cic_decimator.v)  ← VERIFIED 
    3.072 MHz → 16 kHz, no multipliers
         ↓
 256-point FFT Engine (fft_r2dit.v)   ← IN PROGRESS
@@ -83,10 +83,10 @@ mvdr-beamformer-fpga/
 │
 ├── verilog/                  # FPGA implementation (Phase 2 — IN PROGRESS)
 │   ├── i2s_master_clk.v      # BCLK + WS generation
-│   ├── i2s_rx.v              # 4-channel I2S capture ✅
-│   ├── i2s_rx_tb.v           # Testbench — 4/4 PASS ✅
-│   ├── cic_decimator.v       # 3-stage CIC, R=192 ✅
-│   ├── cic_decimator_tb.v    # Testbench — 2/2 PASS ✅
+│   ├── i2s_rx.v              # 4-channel I2S capture 
+│   ├── i2s_rx_tb.v           # Testbench — 4/4 PASS 
+│   ├── cic_decimator.v       # 3-stage CIC, R=192 
+│   ├── cic_decimator_tb.v    # Testbench — 2/2 PASS 
 │   └── fft_r2dit.v           # Radix-2 DIT FFT (in progress)
 │
 └── docs/                     # Reports and figures
