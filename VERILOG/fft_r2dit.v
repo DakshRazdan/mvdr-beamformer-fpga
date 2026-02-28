@@ -118,10 +118,13 @@ wire signed [2*DW-1:0]   wb_im_full = (w_re_w * b_im_w) + (w_im_w * b_re_w);
 wire signed [DW-1:0]     wb_re      = $signed(wb_re_full) >>> 15;
 wire signed [DW-1:0]     wb_im      = $signed(wb_im_full) >>> 15;
 
-wire signed [DW-1:0]     p_re = a_re_w + wb_re;
-wire signed [DW-1:0]     p_im = a_im_w + wb_im;
-wire signed [DW-1:0]     q_re = a_re_w - wb_re;
-wire signed [DW-1:0]     q_im = a_im_w - wb_im;
+// Scale by >>1 each stage to prevent overflow across 8 stages (total /256)
+// Without scaling: max growth = 2^8 = 256x -> overflows 16-bit
+// With scaling: output magnitude = input amplitude (no net growth)
+wire signed [DW-1:0]     p_re = (a_re_w + wb_re) >>> 1;
+wire signed [DW-1:0]     p_im = (a_im_w + wb_im) >>> 1;
+wire signed [DW-1:0]     q_re = (a_re_w - wb_re) >>> 1;
+wire signed [DW-1:0]     q_im = (a_im_w - wb_im) >>> 1;
 
 // ============================================================================
 // FSM
