@@ -1,6 +1,6 @@
 // ============================================================================
 // butterfly_tb.v  —  Testbench for Butterfly Unit
-// ----------------------------------------------------------------------------
+// 
 // Verifies: P = A + W*B  and  Q = A - W*B
 //
 // Test cases:
@@ -45,14 +45,14 @@ task check;
         if (got_pr === exp_pr && got_pi === exp_pi &&
             got_qr === exp_qr && got_qi === exp_qi) begin
             $display("  PASS test %0d: P=(%0d,%0d) Q=(%0d,%0d)",
-                     test_num, got_pr, got_pi, got_qr, got_qi);
+                    test_num, got_pr, got_pi, got_qr, got_qi);
             pass_count = pass_count + 1;
         end else begin
             $display("  FAIL test %0d:", test_num);
             $display("    P got=(%0d,%0d) exp=(%0d,%0d)",
-                     got_pr, got_pi, exp_pr, exp_pi);
+                    got_pr, got_pi, exp_pr, exp_pi);
             $display("    Q got=(%0d,%0d) exp=(%0d,%0d)",
-                     got_qr, got_qi, exp_qr, exp_qi);
+                    got_qr, got_qi, exp_qr, exp_qi);
             fail_count = fail_count + 1;
         end
     end
@@ -97,7 +97,7 @@ initial begin
         pass_count = pass_count + 1;
     end else begin
         $display("  FAIL: P=(%0d,%0d) Q=(%0d,%0d) [exp P=(150,0) Q=(50,0)]",
-                 pr, pi_out, qr, qi);
+                pr, pi_out, qr, qi);
         fail_count = fail_count + 1;
     end
 
@@ -123,7 +123,7 @@ initial begin
         pass_count = pass_count + 1;
     end else begin
         $display("  FAIL: P=(%0d,%0d) Q=(%0d,%0d) [exp P=(50,0) Q=(150,0)]",
-                 pr, pi_out, qr, qi);
+                pr, pi_out, qr, qi);
         fail_count = fail_count + 1;
     end
 

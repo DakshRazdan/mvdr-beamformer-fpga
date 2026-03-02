@@ -1,6 +1,6 @@
 // ============================================================================
 // mvdr_weights.v  —  MVDR Weight Computation (per frequency bin)  v6
-// ----------------------------------------------------------------------------
+// -
 // ROOT CAUSE OF ALL PREVIOUS FAILURES:
 //   iverilog silently returns 0 when reading a 2D reg array with a variable
 //   first index — aug_re[pivot_col][dc] and aug_re[elim_row][ec] all read 0.
@@ -18,26 +18,26 @@
 module mvdr_weights #(
     parameter NBINS  = 129,
     parameter NMICS  = 4,
-    parameter DW     = 16,
-    parameter IW     = 32,
+    parameter DW = 16,
+    parameter IW = 32,
     parameter signed [31:0] DELTA = 32'sd536870912   // 0.5 * 2^30
 )(
-    input  wire         clk,
-    input  wire         rst_n,
-    input  wire         compute,
-    input  wire [7:0]   bin_in,
-    output reg  [7:0]   rd_bin,
-    output reg  [3:0]   rd_elem,
-    output reg          rd_en,
-    input  wire signed [DW-1:0] rd_re,
-    input  wire signed [DW-1:0] rd_im,
-    input  wire         rd_valid,
-    output reg  signed [DW-1:0] w0_re, w0_im,
-    output reg  signed [DW-1:0] w1_re, w1_im,
-    output reg  signed [DW-1:0] w2_re, w2_im,
-    output reg  signed [DW-1:0] w3_re, w3_im,
-    output reg  [7:0]   w_bin,
-    output reg          w_valid
+    input wire clk,
+    input wire rst_n,
+    input wire compute,
+    input wire [7:0] bin_in,
+    output reg [7:0] rd_bin,
+    output reg [3:0] rd_elem,
+    output reg rd_en,
+    input wire signed [DW-1:0] rd_re,
+    input wire signed [DW-1:0] rd_im,
+    input wire rd_valid,
+    output reg signed [DW-1:0] w0_re, w0_im,
+    output reg signed [DW-1:0] w1_re, w1_im,
+    output reg signed [DW-1:0] w2_re, w2_im,
+    output reg signed [DW-1:0] w3_re, w3_im,
+    output reg [7:0] w_bin,
+    output reg w_valid
 );
 
 // ============================================================================
@@ -56,28 +56,28 @@ reg signed [63:0] denom_re;   // needs >32 bits: sum of 4 Q2.30 values can reach
 // STATES — one per pivot, one per elimination row
 // ============================================================================
 localparam [4:0]
-    ST_IDLE        = 5'd0,
-    ST_LOAD_ISSUE  = 5'd1,   // assert rd_en for current read_cnt
-    ST_LOAD_WAIT   = 5'd2,   // wait for rd_valid, store to named reg
-    ST_SETUP       = 5'd3,   // add diagonal loading, set d column
-    ST_P0          = 5'd4,   // pivot col 0: divide row 0 by a00
-    ST_E0_1        = 5'd5,   // elim col 0 from row 1
-    ST_E0_2        = 5'd6,   // elim col 0 from row 2
-    ST_E0_3        = 5'd7,   // elim col 0 from row 3
-    ST_P1          = 5'd8,   // pivot col 1: divide row 1 by a11
-    ST_E1_0        = 5'd9,   // elim col 1 from row 0
-    ST_E1_2        = 5'd10,  // elim col 1 from row 2
-    ST_E1_3        = 5'd11,  // elim col 1 from row 3
-    ST_P2          = 5'd12,  // pivot col 2: divide row 2 by a22
-    ST_E2_0        = 5'd13,  // elim col 2 from row 0
-    ST_E2_1        = 5'd14,  // elim col 2 from row 1
-    ST_E2_3        = 5'd15,  // elim col 2 from row 3
-    ST_P3          = 5'd16,  // pivot col 3: divide row 3 by a33
-    ST_E3_0        = 5'd17,  // elim col 3 from row 0
-    ST_E3_1        = 5'd18,  // elim col 3 from row 1
-    ST_E3_2        = 5'd19,  // elim col 3 from row 2
-    ST_NORM        = 5'd20,
-    ST_OUTPUT      = 5'd21;
+    ST_IDLE = 5'd0,
+    ST_LOAD_ISSUE = 5'd1,   // assert rd_en for current read_cnt
+    ST_LOAD_WAIT = 5'd2,   // wait for rd_valid, store to named reg
+    ST_SETUP = 5'd3,   // add diagonal loading, set d column
+    ST_P0 = 5'd4,   // pivot col 0: divide row 0 by a00
+    ST_E0_1 = 5'd5,   // elim col 0 from row 1
+    ST_E0_2 = 5'd6,   // elim col 0 from row 2
+    ST_E0_3 = 5'd7,   // elim col 0 from row 3
+    ST_P1 = 5'd8,   // pivot col 1: divide row 1 by a11
+    ST_E1_0 = 5'd9,   // elim col 1 from row 0
+    ST_E1_2 = 5'd10,  // elim col 1 from row 2
+    ST_E1_3 = 5'd11,  // elim col 1 from row 3
+    ST_P2 = 5'd12,  // pivot col 2: divide row 2 by a22
+    ST_E2_0 = 5'd13,  // elim col 2 from row 0
+    ST_E2_1 = 5'd14,  // elim col 2 from row 1
+    ST_E2_3 = 5'd15,  // elim col 2 from row 3
+    ST_P3 = 5'd16,  // pivot col 3: divide row 3 by a33
+    ST_E3_0 = 5'd17,  // elim col 3 from row 0
+    ST_E3_1 = 5'd18,  // elim col 3 from row 1
+    ST_E3_2 = 5'd19,  // elim col 3 from row 2
+    ST_NORM = 5'd20,
+    ST_OUTPUT = 5'd21;
 
 reg [4:0] state;
 reg [7:0] cur_bin;
@@ -125,8 +125,8 @@ integer k;
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        state   <= ST_IDLE;
-        rd_en   <= 0;
+        state <= ST_IDLE;
+        rd_en <= 0;
         w_valid <= 0;
         read_cnt<= 0;
         a00r<=0;a00i<=0; a01r<=0;a01i<=0; a02r<=0;a02i<=0; a03r<=0;a03i<=0; a04r<=0;a04i<=0;
@@ -135,15 +135,15 @@ always @(posedge clk or negedge rst_n) begin
         a30r<=0;a30i<=0; a31r<=0;a31i<=0; a32r<=0;a32i<=0; a33r<=0;a33i<=0; a34r<=0;a34i<=0;
     end else begin
         w_valid <= 0;
-        rd_en   <= 0;
+        rd_en <= 0;
 
         case (state)
 
         // ------------------------------------------------------------------
         ST_IDLE: if (compute) begin
-            cur_bin  <= bin_in;
+            cur_bin <= bin_in;
             read_cnt <= 0;
-            state    <= ST_LOAD_ISSUE;
+            state <= ST_LOAD_ISSUE;
         end
 
         // ------------------------------------------------------------------
@@ -151,26 +151,26 @@ always @(posedge clk or negedge rst_n) begin
         // No elem_latch — read_cnt is stable during WAIT.
         // ------------------------------------------------------------------
         ST_LOAD_ISSUE: begin
-            rd_bin  <= cur_bin;
+            rd_bin <= cur_bin;
             rd_elem <= read_cnt;
-            rd_en   <= 1;
-            state   <= ST_LOAD_WAIT;
+            rd_en <= 1;
+            state <= ST_LOAD_WAIT;
         end
 
         ST_LOAD_WAIT: begin
             if (rd_valid) begin
                 // Store to explicitly named register — no variable 2D indexing
                 case (read_cnt)
-                    4'd0:  begin a00r<=`EXT15(rd_re); a00i<=`EXT15(rd_im); end
-                    4'd1:  begin a01r<=`EXT15(rd_re); a01i<=`EXT15(rd_im); end
-                    4'd2:  begin a02r<=`EXT15(rd_re); a02i<=`EXT15(rd_im); end
-                    4'd3:  begin a03r<=`EXT15(rd_re); a03i<=`EXT15(rd_im); end
-                    4'd4:  begin a10r<=`EXT15(rd_re); a10i<=`EXT15(rd_im); end
-                    4'd5:  begin a11r<=`EXT15(rd_re); a11i<=`EXT15(rd_im); end
-                    4'd6:  begin a12r<=`EXT15(rd_re); a12i<=`EXT15(rd_im); end
-                    4'd7:  begin a13r<=`EXT15(rd_re); a13i<=`EXT15(rd_im); end
-                    4'd8:  begin a20r<=`EXT15(rd_re); a20i<=`EXT15(rd_im); end
-                    4'd9:  begin a21r<=`EXT15(rd_re); a21i<=`EXT15(rd_im); end
+                    4'd0: begin a00r<=`EXT15(rd_re); a00i<=`EXT15(rd_im); end
+                    4'd1: begin a01r<=`EXT15(rd_re); a01i<=`EXT15(rd_im); end
+                    4'd2: begin a02r<=`EXT15(rd_re); a02i<=`EXT15(rd_im); end
+                    4'd3: begin a03r<=`EXT15(rd_re); a03i<=`EXT15(rd_im); end
+                    4'd4: begin a10r<=`EXT15(rd_re); a10i<=`EXT15(rd_im); end
+                    4'd5: begin a11r<=`EXT15(rd_re); a11i<=`EXT15(rd_im); end
+                    4'd6: begin a12r<=`EXT15(rd_re); a12i<=`EXT15(rd_im); end
+                    4'd7: begin a13r<=`EXT15(rd_re); a13i<=`EXT15(rd_im); end
+                    4'd8: begin a20r<=`EXT15(rd_re); a20i<=`EXT15(rd_im); end
+                    4'd9: begin a21r<=`EXT15(rd_re); a21i<=`EXT15(rd_im); end
                     4'd10: begin a22r<=`EXT15(rd_re); a22i<=`EXT15(rd_im); end
                     4'd11: begin a23r<=`EXT15(rd_re); a23i<=`EXT15(rd_im); end
                     4'd12: begin a30r<=`EXT15(rd_re); a30i<=`EXT15(rd_im); end
@@ -183,7 +183,7 @@ always @(posedge clk or negedge rst_n) begin
                     state <= ST_SETUP;
                 else begin
                     read_cnt <= read_cnt + 1;
-                    state    <= ST_LOAD_ISSUE;
+                    state <= ST_LOAD_ISSUE;
                 end
             end
         end
@@ -401,7 +401,7 @@ always @(posedge clk or negedge rst_n) begin
         // ------------------------------------------------------------------
         ST_NORM: begin
             denom_re <= $signed({{32{a04r[31]}},a04r}) + $signed({{32{a14r[31]}},a14r}) + $signed({{32{a24r[31]}},a24r}) + $signed({{32{a34r[31]}},a34r});
-            state    <= ST_OUTPUT;
+            state <= ST_OUTPUT;
         end
 
         // ------------------------------------------------------------------

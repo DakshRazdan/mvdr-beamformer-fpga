@@ -1,6 +1,6 @@
 // ============================================================================
 // covariance_est_tb.v  —  Testbench for Covariance Matrix Estimator
-// ----------------------------------------------------------------------------
+// 
 // Test 1: R[0][0] = |X0|^2 after first frame
 // Test 2: Alpha decay after second frame
 // Test 3: R[0][1] = X0 * conj(X1) cross-correlation
@@ -11,7 +11,7 @@
 
 module covariance_est_tb;
 
-localparam DW    = 16;
+localparam DW = 16;
 localparam NBINS = 129;
 localparam CLK_P = 10;
 localparam signed [DW-1:0] ALPHA = 16'd31129;
@@ -23,15 +23,15 @@ reg signed [DW-1:0] x0_re, x0_im;
 reg signed [DW-1:0] x1_re, x1_im;
 reg signed [DW-1:0] x2_re, x2_im;
 reg signed [DW-1:0] x3_re, x3_im;
-reg [7:0]  x_bin;
-reg        x_valid;
+reg [7:0] x_bin;
+reg  x_valid;
 
 // Read port
-reg [7:0]  rd_bin;
-reg [3:0]  rd_elem;
-reg        rd_en;
+reg [7:0] rd_bin;
+reg [3:0] rd_elem;
+reg rd_en;
 wire signed [DW-1:0] rd_re, rd_im;
-wire                 rd_valid;
+wire rd_valid;
 
 covariance_est #(.NBINS(NBINS), .DW(DW), .ALPHA(ALPHA)) dut (
     .clk(clk), .rst_n(rst_n),
@@ -56,7 +56,7 @@ endfunction
 
 // Send one bin update (1-cycle pulse)
 task send_bin;
-    input [7:0]           bin;
+    input [7:0] bin;
     input signed [DW-1:0] r0,i0,r1,i1,r2,i2,r3,i3;
     begin
         @(negedge clk);
@@ -118,10 +118,10 @@ initial begin
 
     $display("=== Covariance Estimator Testbench ===");
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // TEST 1: R[0][0] = |X0|^2
     // X0=8192+0j -> R[0][0] = (8192*8192)>>15 = 2048
-    // ----------------------------------------------------------
+    // ==========================================================
     $display("\nTest 1: R[0][0] = |X0|^2");
     send_bin(0, 8192,0, 0,0, 0,0, 0,0);
     repeat(25) @(posedge clk);
@@ -130,10 +130,10 @@ initial begin
     check_val(rd_re, 16'd2048, "R00 re");
     check_val(rd_im, 16'd0,    "R00 im");
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // TEST 2: Alpha decay — send same bin again
     // new R[0][0] = alpha*2048 + 2048
-    // ----------------------------------------------------------
+    // ==========================================================
     $display("\nTest 2: Alpha decay");
     send_bin(0, 8192,0, 0,0, 0,0, 0,0);
     repeat(25) @(posedge clk);
@@ -142,12 +142,12 @@ initial begin
     exp_re = q15_mul(ALPHA, 16'd2048) + 16'd2048;
     check_val(rd_re, exp_re, "R00 alpha");
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // TEST 3: R[0][1] = X0*conj(X1)
     // X0=8192+0j, X1=0+8192j
     // re = 8192*0 + 0*8192 = 0
     // im = 0*0 - 8192*8192 = -67108864 >> 15 = -2048
-    // ----------------------------------------------------------
+    // ==========================================================
     $display("\nTest 3: R[0][1] = X0*conj(X1)");
     send_bin(1, 8192,0, 0,8192, 0,0, 0,0);
     repeat(25) @(posedge clk);
@@ -156,9 +156,9 @@ initial begin
     check_val(rd_re, 16'd0,    "R01 re");
     check_val(rd_im, -16'd2048,"R01 im");
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // TEST 4: Hermitian — R[1][0] = conj(R[0][1]) = (0, +2048)
-    // ----------------------------------------------------------
+    // ==========================================================
     $display("\nTest 4: Hermitian R[1][0] = conj(R[0][1])");
     read_elem(1, 4); // elem 4 = row1*4+col0
 

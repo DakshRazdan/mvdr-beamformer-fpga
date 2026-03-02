@@ -3,19 +3,19 @@
 module i2s_rx_tb;
 
 localparam SYS_CLK_FREQ = 100_000_000;
-localparam BCLK_FREQ    = 3_072_000;
-localparam DATA_WIDTH   = 24;
+localparam BCLK_FREQ = 3_072_000;
+localparam DATA_WIDTH = 24;
 
 localparam [23:0] TEST_LEFT  = 24'hA5_B6_C7;
 localparam [23:0] TEST_RIGHT = 24'h12_34_56;
 
 localparam SYS_CLK_PERIOD = 10;           // 10ns = 100MHz
-localparam BCLK_PERIOD    = 326;          // ~326ns = 3.072MHz
+localparam BCLK_PERIOD = 326;          // ~326ns = 3.072MHz
 
-reg         clk, rst_n;
-reg         bclk, ws, sdata;
+reg clk, rst_n;
+reg bclk, ws, sdata;
 wire [23:0] left_out, right_out;
-wire        valid;
+wire valid;
 
 i2s_rx #(.DATA_WIDTH(DATA_WIDTH)) dut (
     .clk(clk), .rst_n(rst_n),

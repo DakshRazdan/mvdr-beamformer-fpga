@@ -1,6 +1,6 @@
 // ============================================================================
 // twiddle_rom.v  —  Twiddle Factor ROM for 256-point FFT
-// ----------------------------------------------------------------------------
+// 
 // Stores W_N^k = e^(-j*2*pi*k/N) for k = 0..N/2-1 (128 entries)
 //
 // FORMAT: Q1.15 fixed point
@@ -17,13 +17,13 @@
 // ============================================================================
 
 module twiddle_rom #(
-    parameter N     = 256,   // FFT size
-    parameter DW    = 16     // Data width
+    parameter N = 256,   // FFT size
+    parameter DW = 16     // Data width
 )(
-    input  wire                    clk,
-    input  wire [$clog2(N/2)-1:0]  addr,   // 0..127
-    output reg  signed [DW-1:0]    wr,     // cos term
-    output reg  signed [DW-1:0]    wi      // -sin term
+    input wire clk,
+    input wire [$clog2(N/2)-1:0] addr,   // 0..127
+    output reg signed [DW-1:0] wr,     // cos term
+    output reg signed [DW-1:0] wi      // -sin term
 );
 
 localparam HALF_N = N/2;  // 128 entries

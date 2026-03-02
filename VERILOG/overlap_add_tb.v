@@ -9,16 +9,16 @@
 
 module overlap_add_tb;
 
-localparam N     = 256;
-localparam HOP   = 128;
-localparam DW    = 16;
+localparam N = 256;
+localparam HOP = 128;
+localparam DW = 16;
 localparam CLK_P = 10;
 
 reg clk, rst_n;
 reg signed [DW-1:0] x_re;
-reg        x_valid, x_last;
+reg  x_valid, x_last;
 wire signed [DW-1:0] pcm_out;
-wire       pcm_valid, pcm_last;
+wire pcm_valid, pcm_last;
 
 overlap_add #(.N(N), .HOP(HOP), .DW(DW)) dut (
     .clk(clk), .rst_n(rst_n),
@@ -36,7 +36,7 @@ reg signed [DW-1:0] out_buf [0:HOP-1];
 always @(posedge clk) begin
     if (pcm_valid) begin
         if (out_idx < HOP) out_buf[out_idx] <= pcm_out;
-        out_idx   <= out_idx + 1;
+        out_idx <= out_idx + 1;
         out_count <= out_count + 1;
         if (pcm_last) last_count <= last_count + 1;
     end
@@ -48,13 +48,13 @@ task send_frame;
     begin
         for (n = 0; n < N; n = n+1) begin
             @(negedge clk);
-            x_re    = val;
+            x_re = val;
             x_valid = 1;
-            x_last  = (n == N-1);
+            x_last = (n == N-1);
         end
         @(negedge clk);
         x_valid = 0;
-        x_last  = 0;
+        x_last = 0;
     end
 endtask
 
@@ -65,7 +65,7 @@ initial begin
     $dumpvars(0, overlap_add_tb);
 
     pass_count = 0; fail_count = 0;
-    out_count  = 0; last_count = 0; out_idx = 0;
+    out_count = 0; last_count = 0; out_idx = 0;
     rst_n = 0; x_valid = 0; x_last = 0; x_re = 0;
 
     repeat(5) @(posedge clk);

@@ -2,23 +2,23 @@
 `include "cic_decimator.v"
 module cic_decimator_tb;
 
-localparam INPUT_WIDTH  = 24;
+localparam INPUT_WIDTH = 24;
 localparam OUTPUT_WIDTH = 16;
-localparam M_STAGES     = 3;
-localparam R_DECIMATE   = 192;
-localparam CLK_PERIOD   = 10;
+localparam M_STAGES = 3;
+localparam R_DECIMATE = 192;
+localparam CLK_PERIOD = 10;
 
-reg                     clk, rst_n;
-reg  [INPUT_WIDTH-1:0]  x_in;
-reg                     x_valid;
+reg clk, rst_n;
+reg [INPUT_WIDTH-1:0] x_in;
+reg x_valid;
 wire [OUTPUT_WIDTH-1:0] y_out;
-wire                    y_valid;
+wire y_valid;
 
 cic_decimator #(
     .INPUT_WIDTH (INPUT_WIDTH),
     .OUTPUT_WIDTH(OUTPUT_WIDTH),
-    .M_STAGES    (M_STAGES),
-    .R_DECIMATE  (R_DECIMATE)
+    .M_STAGES (M_STAGES),
+    .R_DECIMATE (R_DECIMATE)
 ) 
 dut (
     .clk(clk), .rst_n(rst_n),
@@ -35,10 +35,10 @@ integer out_count;
 
 always @(posedge clk) begin
     if (!rst_n) begin
-        in_count  <= 0;
+        in_count <= 0;
         out_count <= 0;
     end else begin
-        if (x_valid)  in_count  <= in_count  + 1;
+        if (x_valid) in_count <= in_count + 1;
         if (y_valid) begin
             out_count <= out_count + 1;
             $display("  Output %0d: y_out=%0d at in_count=%0d", out_count+1, $signed(y_out), in_count);
@@ -51,11 +51,11 @@ real sine_val;
 real pi;
 
 initial begin
-    pi      = 3.14159265358979;
+    pi = 3.14159265358979;
     $dumpfile("cic_decimator.vcd");
     $dumpvars(0, cic_decimator_tb);
-    rst_n   = 0;
-    x_in    = 0;
+    rst_n = 0;
+    x_in = 0;
     x_valid = 0;
     repeat(10) @(posedge clk);
     rst_n <= 1; // Fixed: Use non-blocking to prevent reset race conditions
@@ -71,7 +71,7 @@ initial begin
         sine_val = $sin(2.0 * pi * 1000.0 * i / 3072000.0);
         
         // Fixed: Use non-blocking assignments for synchronous stimulus
-        x_in    <= $rtoi(sine_val * 4194304.0); // 2^22
+        x_in <= $rtoi(sine_val * 4194304.0); // 2^22
         x_valid <= 1'b1;
     end
 

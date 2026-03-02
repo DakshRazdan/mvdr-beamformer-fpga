@@ -10,14 +10,14 @@
 
 module fft_r2dit_tb;
 
-localparam N          = 256;
-localparam DW         = 16;
-localparam LOGN       = 8;
+localparam N = 256;
+localparam DW = 16;
+localparam LOGN = 8;
 localparam CLK_PERIOD = 10;
 
-reg  clk, rst_n;
-reg  signed [DW-1:0] x_re;
-reg  x_valid;
+reg clk, rst_n;
+reg signed [DW-1:0] x_re;
+reg x_valid;
 wire signed [DW-1:0] y_re, y_im;
 wire y_valid, y_last;
 
@@ -87,7 +87,7 @@ task find_peak;
             mag2 = out_re[bin_idx]*out_re[bin_idx] + out_im[bin_idx]*out_im[bin_idx];
             if (mag2 > peak_mag2) begin
                 peak_mag2 = mag2;
-                peak_bin  = bin_idx;
+                peak_bin = bin_idx;
             end
         end
     end
@@ -98,7 +98,7 @@ integer pass_count, fail_count;
 initial begin
     $dumpfile("fft_r2dit.vcd");
     $dumpvars(0, fft_r2dit_tb);
-    pi_val     = 3.14159265358979;
+    pi_val = 3.14159265358979;
     pass_count = 0; fail_count = 0;
     rst_n = 0; x_valid = 0; x_re = 0; out_count = 0;
     repeat(10) @(posedge clk);

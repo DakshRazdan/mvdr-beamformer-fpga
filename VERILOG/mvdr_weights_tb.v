@@ -1,6 +1,6 @@
 // ============================================================================
 // mvdr_weights_tb.v  —  Testbench for MVDR Weight Computation
-// ----------------------------------------------------------------------------
+// 
 // Tests MVDR weights with a known covariance matrix
 //
 // TEST SETUP:
@@ -21,24 +21,24 @@
 
 module mvdr_weights_tb;
 
-localparam DW    = 16;
+localparam DW = 16;
 localparam CLK_P = 10;
 
 reg clk, rst_n;
 
 // DUT
-reg        compute;
-reg [7:0]  bin_in;
+reg compute;
+reg [7:0] bin_in;
 
-wire [7:0]  rd_bin;
-wire [3:0]  rd_elem;
-wire        rd_en;
-reg  signed [DW-1:0] rd_re_r, rd_im_r;
-reg         rd_valid_r;
+wire [7:0] rd_bin;
+wire [3:0] rd_elem;
+wire rd_en;
+reg signed [DW-1:0] rd_re_r, rd_im_r;
+reg rd_valid_r;
 
 wire signed [DW-1:0] w0_re,w0_im,w1_re,w1_im,w2_re,w2_im,w3_re,w3_im;
 wire [7:0]  w_bin;
-wire        w_valid;
+wire w_valid;
 
 mvdr_weights #(.NBINS(129), .DW(DW)) dut (
     .clk(clk), .rst_n(rst_n),
@@ -62,8 +62,8 @@ always #(CLK_P/2) clk = ~clk;
 // ============================================================================
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        rd_re_r    <= 0;
-        rd_im_r    <= 0;
+        rd_re_r <= 0;
+        rd_im_r <= 0;
         rd_valid_r <= 0;
     end else begin
         rd_valid_r <= rd_en;
