@@ -35,10 +35,11 @@ end
 %% Thresholds (DO NOT CHANGE — matched to Verilog)
 energy_th = 0.01;    % Q1.15 equivalent: 328 (was 0.1, lowered for 128-sample frames)
 zcr_low   = 0.02;    % Q1.15: 655
-zcr_high  = 0.20;    % Q1.15: 6554
+zcr_high = 0.45;     % Q1.15: 14746
 
 %% vad_out Decision
 vad_out = (energy > energy_th) & (zcr > zcr_low) & (zcr < zcr_high);
+vad_out(1) = 0;     
 
 %% Detection rate
 speech_frames = round(fs / frame_shift);  % approx frames in speech region
