@@ -1,11 +1,11 @@
 % ============================================================
-% vad.m — Voice Activity Detection (Fixed for MVDR system)
+% vad_out.m — Voice Activity Detection (Fixed for MVDR system)
 % Compatible with: 16kHz, 128-sample frames
 % ============================================================
 clc; clear; close all;
 
 fs        = 16000;   % Must match FPGA (16kHz)
-frame_len = 320;     % 20ms frame for VAD (320 samples at 16kHz)
+frame_len = 320;     % 20ms frame for vad_out (320 samples at 16kHz)
 frame_shift = 128;   % Match FPGA hop size (was 160, now 128)
 
 %% Generate test (replace with real beamformer output)
@@ -37,17 +37,17 @@ energy_th = 0.01;    % Q1.15 equivalent: 328 (was 0.1, lowered for 128-sample fr
 zcr_low   = 0.02;    % Q1.15: 655
 zcr_high  = 0.20;    % Q1.15: 6554
 
-%% VAD Decision
-vad = (energy > energy_th) & (zcr > zcr_low) & (zcr < zcr_high);
+%% vad_out Decision
+vad_out = (energy > energy_th) & (zcr > zcr_low) & (zcr < zcr_high);
 
 %% Detection rate
 speech_frames = round(fs / frame_shift);  % approx frames in speech region
-detected = sum(vad(end-speech_frames:end));
+detected = sum(vad_out(end-speech_frames:end));
 fprintf('Speech frames detected: %d / %d\n', detected, speech_frames);
 
 %% Plot
 figure;
 subplot(3,1,1); plot(t, x); title('Input Signal (Beamformer Output)');
 subplot(3,1,2); plot(energy); yline(energy_th,'r--'); title('Energy + Threshold');
-subplot(3,1,3); stairs(vad); ylim([-0.2 1.2]); title('VAD Output (1=Speech)');
+subplot(3,1,3); stairs(vad_out); ylim([-0.2 1.2]); title('vad_out Output (1=Speech)');
 xlabel('Frame Index');
